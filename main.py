@@ -1,6 +1,6 @@
-from map_reduce.framework import MapReduce
-from jobs.word_count import word_count_mapper
-from jobs.word_count import word_count_reducer
+from map_reduce.master import Master
+from jobs.word_count import word_count_mapper as mapper
+from jobs.word_count import word_count_reducer as reducer
 
 
 if __name__ == "__main__":
@@ -16,9 +16,9 @@ if __name__ == "__main__":
     
     print("-" * 20)
 
-    map_reduce = MapReduce(mapper=word_count_mapper, reducer=word_count_reducer)
-    output = map_reduce.execute(input_text)
+    job = Master(input_text, mapper, reducer, num_workers=2)
+    output = job.execute()
 
-    print("---- Final Output ----")
+    print("\n--- Final Output ---")
     for word, count in sorted(output):
         print(f"{word}: {count}")
